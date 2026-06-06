@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Influence Lab — Self-Regulation Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1A3A1A;
+    --mid: #2D5A27;
+    --sage: #4A8C3F;
+    --mint: #6ECFB5;
+    --pale: #EBF5EE;
+    --rust: #B85C38;
+    --rust-pale: #FDEEE8;
+    --navy: #1E3A5F;
+    --navy-pale: #EAF0F8;
+    --cream: #FAFDF8;
+    --dark: #1A2A1A;
+    --grey: #5A6A58;
+    --light-grey: #888;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--forest);
+    color: white;
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(110,207,181,0.08);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 60px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(110,207,181,0.05);
+  }
+  .hero-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    color: var(--mint);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--mint);
+  }
+  .hero p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+  .hero-tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--mint);
+    border-left: 2px solid var(--mint);
+    padding-left: 14px;
+    opacity: 0.85;
+  }
+
+  /* ── NAV TABS ── */
+  .nav {
+    background: white;
+    border-bottom: 1px solid #e0ece0;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(26,58,26,0.06);
+  }
+  .nav button {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 16px 24px;
+    border: none;
+    background: none;
+    color: var(--grey);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .nav button:hover { color: var(--sage); }
+  .nav button.active {
+    color: var(--forest);
+    border-bottom-color: var(--mint);
+    background: var(--pale);
+  }
+
+  /* ── CONTENT ── */
+  .content { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    margin-bottom: 36px;
+  }
+  .section-header .eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 8px;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--forest);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .section-header p {
+    font-size: 15px;
+    color: var(--grey);
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: white;
+    border: 1px solid #e0ece0;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--forest);
+    margin-bottom: 6px;
+  }
+  .card-sub {
+    font-size: 13px;
+    color: var(--grey);
+    margin-bottom: 18px;
+    font-style: italic;
+  }
+
+  /* ── QUESTION BLOCKS ── */
+  .question-block {
+    margin-bottom: 28px;
+  }
+  .question-block label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--forest);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .question-block .q-hint {
+    font-size: 12px;
+    color: var(--grey);
+    font-style: italic;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  textarea {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--dark);
+    border: 1.5px solid #d0e8d0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    resize: vertical;
+    min-height: 80px;
+    background: var(--pale);
+    transition: border-color 0.2s;
+    line-height: 1.6;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: var(--mint);
+    background: white;
+  }
+  textarea::placeholder { color: #aac5aa; }
+
+  /* ── ZONE BANDS ── */
+  .zone {
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+  .zone-hyper { background: var(--rust-pale); border-left: 4px solid var(--rust); }
+  .zone-window { background: var(--pale); border-left: 4px solid var(--sage); }
+  .zone-hypo { background: var(--navy-pale); border-left: 4px solid var(--navy); }
+  .zone-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .zone-hyper .zone-label { color: var(--rust); }
+  .zone-window .zone-label { color: var(--sage); }
+  .zone-hypo .zone-label { color: var(--navy); }
+  .zone h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    margin-bottom: 10px;
+  }
+  .zone-hyper h3 { color: #8B3A1F; }
+  .zone-window h3 { color: var(--forest); }
+  .zone-hypo h3 { color: var(--navy); }
+
+  /* ── ARCHETYPE SELECTOR ── */
+  .archetype-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 560px) { .archetype-grid { grid-template-columns: 1fr; } }
+  .archetype-btn {
+    border: 2px solid #d0e8d0;
+    border-radius: 10px;
+    padding: 18px 20px;
+    cursor: pointer;
+    background: white;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .archetype-btn:hover { border-color: var(--mint); background: var(--pale); }
+  .archetype-btn.selected { border-color: var(--sage); background: var(--pale); }
+  .archetype-btn .a-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--forest);
+    margin-bottom: 3px;
+  }
+  .archetype-btn .a-tag {
+    font-size: 12px;
+    color: var(--grey);
+    font-style: italic;
+  }
+
+  /* ── 30-DAY PLAN ── */
+  .plan-section { display: none; margin-top: 28px; }
+  .plan-section.visible { display: block; }
+
+  .week-block {
+    background: white;
+    border: 1px solid #e0ece0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .week-header {
+    background: var(--forest);
+    color: white;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .week-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 400;
+  }
+  .week-header .week-theme {
+    font-size: 12px;
+    color: var(--mint);
+    font-style: italic;
+  }
+  .week-body { padding: 20px 24px; }
+  .day-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f7f0;
+  }
+  .day-row:last-child { border-bottom: none; }
+  .day-num {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--mint);
+    min-width: 36px;
+    padding-top: 2px;
+  }
+  .day-content { flex: 1; }
+  .day-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--forest);
+    margin-bottom: 3px;
+  }
+  .day-body {
+    font-size: 13px;
+    color: var(--grey);
+    line-height: 1.6;
+  }
+  .day-check {
+    width: 20px; height: 20px;
+    border: 2px solid #d0e8d0;
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.2s;
+    appearance: none;
+  }
+  .day-check:checked {
+    background: var(--sage);
+    border-color: var(--sage);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px;
+  }
+
+  /* ── RESOURCE LINKS ── */
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .resource-card {
+    background: white;
+    border: 1px solid #e0ece0;
+    border-radius: 10px;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.2s;
+  }
+  .resource-card:hover {
+    border-color: var(--mint);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26,58,26,0.08);
+  }
+  .resource-card .r-type {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 6px;
+  }
+  .resource-card .r-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--forest);
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .resource-card .r-desc {
+    font-size: 12px;
+    color: var(--grey);
+    line-height: 1.5;
+  }
+  .resource-card .r-arrow {
+    font-size: 18px;
+    color: var(--mint);
+    margin-top: 10px;
+    display: block;
+  }
+
+  /* ── MANTRA DISPLAY ── */
+  .mantra-box {
+    background: var(--forest);
+    color: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  .mantra-box .m-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 12px;
+  }
+  .mantra-box .m-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3.5vw, 26px);
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  /* ── COMMITMENT CARD ── */
+  .commit-card {
+    background: var(--forest);
+    border-radius: 12px;
+    padding: 32px;
+    margin-top: 32px;
+    color: white;
+  }
+  .commit-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+  .commit-card p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .commit-card label {
+    display: block;
+    font-size: 13px;
+    color: var(--mint);
+    font-weight: 500;
+    margin-bottom: 8px;
+    margin-top: 18px;
+    letter-spacing: 0.5px;
+  }
+  .commit-card textarea {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(110,207,181,0.3);
+    color: white;
+    min-height: 60px;
+  }
+  .commit-card textarea::placeholder { color: rgba(255,255,255,0.3); }
+  .commit-card textarea:focus {
+    background: rgba(255,255,255,0.12);
+    border-color: var(--mint);
+  }
+
+  /* ── PRINT BUTTON ── */
+  .btn-print {
+    background: var(--sage);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: background 0.2s;
+  }
+  .btn-print:hover { background: var(--mid); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: #e0ece0;
+    margin: 32px 0;
+  }
+
+  /* ── PILL ── */
+  .pill {
+    display: inline-block;
+    background: var(--pale);
+    color: var(--sage);
+    border: 1px solid #c0e0c0;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 12px;
+    color: var(--light-grey);
+    border-top: 1px solid #e0ece0;
+  }
+
+  @media print {
+    .nav, .btn-print { display: none; }
+    .section { display: block !important; }
+    .hero { print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">The Influence Lab · Manchester Metropolitan University</div>
+  <h1>Self-Regulation<br><em>Playbook</em></h1>
+  <p>Your personal companion for the work that begins after the session. Use this to map your pattern, work through the exercises, and build a regulation practice that actually fits your life.</p>
+  <div class="hero-tagline">You cannot regulate others from a place you have not visited in yourself.</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="active" onclick="showTab('exercise')">The Exercise</button>
+  <button onclick="showTab('archetype')">My Archetype</button>
+  <button onclick="showTab('plan')">30-Day Plan</button>
+  <button onclick="showTab('resources')">Resources</button>
+  <button onclick="showTab('commitment')">My Commitment</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 1 — THE EXERCISE -->
+<div class="content">
+<div id="exercise" class="section active">
+
+  <div class="section-header">
+    <div class="eyebrow">The Exercise</div>
+    <h2>Your Window of Tolerance</h2>
+    <p>Using your report as a guide, map your own pattern across all three zones. Write in your own words — not the theory, your lived experience. Then check: does what you have written match what your archetype says about you?</p>
+  </div>
+
+  <!-- HYPERAROUSAL -->
+  <div class="zone zone-hyper">
+    <div class="zone-label">Hyperarousal</div>
+    <h3>When I tip into too much</h3>
+    <div class="question-block">
+      <label>What do you do, feel or say when pressure takes you upward?</label>
+      <div class="q-hint">Think about the tells — in your body, your behaviour, your relationships. What do people notice? What do you notice, if you stop to look?</div>
+      <textarea placeholder="In my body I notice... At work I tend to... The people around me experience..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>What is the earliest signal — the thing that appears just before the pattern kicks in?</label>
+      <div class="q-hint">Not the full pattern — the first hint. A tightening, a thought, a behaviour that arrives before you notice you have left the window.</div>
+      <textarea placeholder="The earliest signal for me is..."></textarea>
+    </div>
+  </div>
+
+  <!-- WINDOW -->
+  <div class="zone zone-window">
+    <div class="zone-label">Window of Tolerance</div>
+    <h3>When I am present and connected, I...</h3>
+    <div class="question-block">
+      <label>What does regulated look like for you specifically?</label>
+      <div class="q-hint">Not in theory — in your actual life and work. How do you know when you are in it? What are you doing, feeling, saying?</div>
+      <textarea placeholder="When I am in my window I... My leadership feels... My relationships feel..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>What brings you back into the window when you have left it?</label>
+      <div class="q-hint">The things that work — not the things you think should work. Be honest about what actually shifts something.</div>
+      <textarea placeholder="What genuinely helps me return is..."></textarea>
+    </div>
+  </div>
+
+  <!-- HYPOAROUSAL -->
+  <div class="zone zone-hypo">
+    <div class="zone-label">Hypoarousal</div>
+    <h3>When I tip into shutdown</h3>
+    <div class="question-block">
+      <label>What does your shutdown look like?</label>
+      <div class="q-hint">What do others notice? What do you stop doing, feeling or saying? How does it show up at work, at home, in your relationships?</div>
+      <textarea placeholder="When I shut down I... Others tend to notice... At home it looks like..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>What has the shutdown been protecting you from?</label>
+      <div class="q-hint">This is a harder question. Sit with it. There is no wrong answer.</div>
+      <textarea placeholder="I think my shutdown protects me from..."></textarea>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">Now look at your report</div>
+    <div class="card-sub">The moment of recognition</div>
+    <div class="question-block">
+      <label>Where does what you wrote match what your archetype says about you?</label>
+      <textarea placeholder="What matched was..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>Where did it surprise you?</label>
+      <div class="q-hint">The surprises are the most important data. They are the edges of your self-awareness — and the beginning of the work.</div>
+      <textarea placeholder="What surprised me was..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>The one thing you know about yourself now that you did not name clearly before today...</label>
+      <textarea placeholder="What I now know is..."></textarea>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 2 — MY ARCHETYPE -->
+<div id="archetype" class="section">
+
+  <div class="section-header">
+    <div class="eyebrow">My Archetype</div>
+    <h2>Your Pattern, Your Practice</h2>
+    <p>Select your archetype to see your regulation practice — the movement, breath and reframe that works specifically for your pattern.</p>
+  </div>
+
+  <div class="archetype-grid">
+    <button class="archetype-btn" onclick="selectArchetype('navigator')">
+      <div class="a-name">The Navigator</div>
+      <div class="a-tag">Momentum as a method of coping</div>
+    </button>
+    <button class="archetype-btn" onclick="selectArchetype('anchor')">
+      <div class="a-name">The Anchor</div>
+      <div class="a-tag">Stillness mistaken for strength</div>
+    </button>
+    <button class="archetype-btn" onclick="selectArchetype('architect')">
+      <div class="a-name">The Architect</div>
+      <div class="a-tag">Logic as emotional architecture</div>
+    </button>
+    <button class="archetype-btn" onclick="selectArchetype('connector')">
+      <div class="a-name">The Connector</div>
+      <div class="a-tag">Attuned to everyone — except themselves</div>
+    </button>
+  </div>
+
+  <!-- NAVIGATOR -->
+  <div id="arch-navigator" class="plan-section">
+    <div class="mantra-box">
+      <div class="m-label">Your Mantra</div>
+      <div class="m-text">"I lead from presence, not pace."</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;">
+      <div class="zone zone-hyper" style="border-radius:10px;">
+        <div class="zone-label">Movement</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;">Somatic shake — hands to shoulders, 60 seconds. Let the body move without purpose or direction. Body before mind.</p>
+      </div>
+      <div class="zone zone-window" style="border-radius:10px;">
+        <div class="zone-label">Breath</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;">Vortex breath — inhale slowly through the nose in a widening spiral, hold briefly, exhale as the spiral contracts. Three rounds.</p>
+      </div>
+      <div class="zone zone-hypo" style="border-radius:10px;">
+        <div class="zone-label">Reframe</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;font-style:italic;">"What am I moving away from right now?" Name it. One word is enough. Then choose — consciously — what comes next.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">The Navigator's signal</div>
+      <div class="card-sub">When the doing accelerates — pause before the next thing</div>
+      <p style="font-size:14px;color:var(--grey);line-height:1.7;">You are someone who moves through the world with clarity, direction and a strong drive for progress. This makes you exceptional in leadership. It also means that slowing down — pausing to notice what is happening inside — can feel counterintuitive, even uncomfortable. The pace that looks like ambition is sometimes, at least in part, a way of staying one step ahead of the feelings that stillness might surface. Your practice is the pause before the next thing — not stopping, but choosing.</p>
+    </div>
+  </div>
+
+  <!-- ANCHOR -->
+  <div id="arch-anchor" class="plan-section">
+    <div class="mantra-box">
+      <div class="m-label">Your Mantra</div>
+      <div class="m-text">"I give generously. I include myself."</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;">
+      <div class="zone zone-hyper" style="border-radius:10px;">
+        <div class="zone-label">Movement</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;">Somatic shake — hands to shoulders, 60 seconds. The Anchor needs to move what they have been holding still. Let the body release what the mind has been managing.</p>
+      </div>
+      <div class="zone zone-window" style="border-radius:10px;">
+        <div class="zone-label">Breath</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;">Two slow inhales through the nose — the second one longer, filling the lungs completely. One long exhale through the mouth. Then one vortex breath. Three rounds total.</p>
+      </div>
+      <div class="zone zone-hypo" style="border-radius:10px;">
+        <div class="zone-label">Reframe</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;font-style:italic;">"What am I carrying right now that is not mine to carry?" Name it. One word. Put it down — even briefly, even symbolically.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">The Anchor's signal</div>
+      <div class="card-sub">When the flatness arrives — breathe before you absorb one more thing</div>
+      <p style="font-size:14px;color:var(--grey);line-height:1.7;">You have become extraordinarily skilled at absorbing the emotional weight of others. Calm, reliable and present — you are the person people turn to when things are hard. But this steadiness can come at a significant personal cost. When the flatness arrives — the quiet numbness you have learned to call fine — that is your signal. Not to push through. To stop and breathe before you absorb one more thing.</p>
+    </div>
+  </div>
+
+  <!-- ARCHITECT -->
+  <div id="arch-architect" class="plan-section">
+    <div class="mantra-box">
+      <div class="m-label">Your Mantra</div>
+      <div class="m-text">"I do not need to understand it to move through it."</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;">
+      <div class="zone zone-hyper" style="border-radius:10px;">
+        <div class="zone-label">Movement</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;">Feet flat on the floor — press them down deliberately. Feel the ground. Then somatic shake, 60 seconds. Let it be unstructured. Let it be slightly uncomfortable. That discomfort is the practice.</p>
+      </div>
+      <div class="zone zone-window" style="border-radius:10px;">
+        <div class="zone-label">Breath</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;">One vortex breath — spiral in slowly through the nose, hold at the top, spiral out through the mouth. Before the next framework, before the next plan. Body first.</p>
+      </div>
+      <div class="zone zone-hypo" style="border-radius:10px;">
+        <div class="zone-label">Reframe</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;font-style:italic;">"What is actually here, underneath the framework?" Not what does this mean. What does this feel like. One word. Not an analysis.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">The Architect's signal</div>
+      <div class="card-sub">When analysis accelerates — feel before you frame</div>
+      <p style="font-size:14px;color:var(--grey);line-height:1.7;">You find coherence through systems, frameworks and intellectual mastery. This is a formidable quality — but can function as a sophisticated form of emotional avoidance. When uncertainty arises, you potentially reach for analysis rather than attunement. The practice is not eliminating the frameworks. It is feeling what is underneath them before you build them. One word. One feeling. That is enough.</p>
+    </div>
+  </div>
+
+  <!-- CONNECTOR -->
+  <div id="arch-connector" class="plan-section">
+    <div class="mantra-box">
+      <div class="m-label">Your Mantra</div>
+      <div class="m-text">"My needs belong on the list too."</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;">
+      <div class="zone zone-hyper" style="border-radius:10px;">
+        <div class="zone-label">Movement</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;">Somatic shake — 60 seconds. This breaks the habitual attunement to everyone else in the room and lands you back in your own body. The movement comes first, before breath, before the reframe.</p>
+      </div>
+      <div class="zone zone-window" style="border-radius:10px;">
+        <div class="zone-label">Breath</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;">Two vortex breaths. Feel your own breath, your own body, your own internal signal — not the room's. This is the practice of turning the attunement inward.</p>
+      </div>
+      <div class="zone zone-hypo" style="border-radius:10px;">
+        <div class="zone-label">Reframe</div>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-top:8px;font-style:italic;">"Whose needs am I meeting right now — mine or theirs?" No wrong answer. But the asking is everything.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">The Connector's signal</div>
+      <div class="card-sub">When shrinking begins — return to yourself first</div>
+      <p style="font-size:14px;color:var(--grey);line-height:1.7;">You are potentially one of the most emotionally intelligent people in the room — and one of the most at risk. Your capacity to read others, hold space and create psychological safety is exceptional. But this attunement is often asymmetric: directed outward with great skill, rarely turned inward with the same generosity. When you notice yourself shrinking — saying yes when you mean no — that is your signal.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 3 — 30-DAY PLAN -->
+<div id="plan" class="section">
+
+  <div class="section-header">
+    <div class="eyebrow">30-Day Plan</div>
+    <h2>The Practice That Stays</h2>
+    <p>Regulation is not built in a session. It is built in the days after, when the insight is fading and the pattern is returning. This plan is designed to be used — not just read. Tick each day as you complete it.</p>
+  </div>
+
+  <!-- WEEK 1 -->
+  <div class="week-block">
+    <div class="week-header">
+      <h3>Week One — Notice</h3>
+      <span class="week-theme">Days 1–7 · Finding the signal</span>
+    </div>
+    <div class="week-body">
+      <div class="day-row">
+        <div class="day-num">DAY 1</div>
+        <div class="day-content">
+          <div class="day-title">The morning pause</div>
+          <div class="day-body">Before anything else — before the phone, before the email — sit for five minutes. No agenda. Just notice what is there. You are not trying to fix anything. You are learning to stop before the day takes over.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 2</div>
+        <div class="day-content">
+          <div class="day-title">The body scan</div>
+          <div class="day-body">Once today, before a significant task: close your eyes for 60 seconds. Head to feet. Where is the tension? Name it in one word. That noticing is neurologically active — it reduces intensity before you have done anything else.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 3</div>
+        <div class="day-content">
+          <div class="day-title">Name the signal</div>
+          <div class="day-body">Today, notice once when your archetype pattern activates — the doing that accelerates, the flatness that arrives, the analysis that builds, the yes that costs you. Just name it. That is the whole practice today.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 4</div>
+        <div class="day-content">
+          <div class="day-title">The physiological sigh</div>
+          <div class="day-body">Two inhales through the nose — the second one slightly longer, filling the lungs. One long exhale through the mouth. Three repetitions. 60 seconds. Use it before your most demanding moment today. Notice what changes.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 5</div>
+        <div class="day-content">
+          <div class="day-title">The self-compassion question</div>
+          <div class="day-body">When the inner critic fires today — after a mistake, a delay, an imperfect moment — ask: what would I say to someone I respect in exactly this situation? Say that to yourself. Not flattery. Honest kindness.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 6</div>
+        <div class="day-content">
+          <div class="day-title">The somatic shake</div>
+          <div class="day-body">Stand. Loose hands. Shake from the wrists upward — through the arms, the shoulders, the chest. 60 seconds. It looks slightly ridiculous. That is precisely the point — it dissolves the professional armour before anything else can land.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 7</div>
+        <div class="day-content">
+          <div class="day-title">The first reflection</div>
+          <div class="day-body">Read back through the week. What did you notice that you would not normally have noticed? What shifted, even slightly? What is the earliest signal you have found? That signal is your most important tool going forward.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week-block">
+    <div class="week-header">
+      <h3>Week Two — Interrupt</h3>
+      <span class="week-theme">Days 8–14 · Catching the pattern before it runs</span>
+    </div>
+    <div class="week-body">
+      <div class="day-row">
+        <div class="day-num">DAY 8</div>
+        <div class="day-content">
+          <div class="day-title">The vortex breath — anchored</div>
+          <div class="day-body">Today, attach the vortex breath to an existing trigger — before a meeting, after lunch, at the end of the morning. The anchor is what makes the habit automatic. Choose the trigger once and use it all week.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 9</div>
+        <div class="day-content">
+          <div class="day-title">The ten-second pause</div>
+          <div class="day-body">Today, once: when you notice the pattern activating, pause for ten seconds before acting on it. You do not have to change what you do. Just insert the pause. The pause is the practice.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 10</div>
+        <div class="day-content">
+          <div class="day-title">The reframe question — used live</div>
+          <div class="day-body">Today, use your archetype's reframe question in the moment — not in reflection afterwards. When the signal arrives: pause, ask the question, name what comes. One word is enough. Then proceed.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 11</div>
+        <div class="day-content">
+          <div class="day-title">Rest — explicitly protected</div>
+          <div class="day-body">Today, put one block of genuine rest in the diary. Not productive rest. Not useful rest. Just rest — because the nervous system that does not rest cannot regulate well. Treat it as non-negotiable.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 12</div>
+        <div class="day-content">
+          <div class="day-title">The mantra — out loud</div>
+          <div class="day-body">Say your mantra out loud today — not silently, not as a thought. Out loud. Notice where in your body you feel it land. The right mantra will feel slightly uncomfortable — not because it is wrong, but because you have not believed it yet.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 13</div>
+        <div class="day-content">
+          <div class="day-title">The body scan before a meeting</div>
+          <div class="day-body">Before your most significant meeting today: 60-second body scan. Head to feet. Notice what you are carrying into the room. Name it. That noticing changes the quality of your presence before you have said a word.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 14</div>
+        <div class="day-content">
+          <div class="day-title">The second reflection</div>
+          <div class="day-body">Read back through week two. When did the interruption work? When did you miss it? What was the difference between those moments? That difference is where the next layer of the practice lives.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week-block">
+    <div class="week-header">
+      <h3>Week Three — Deepen</h3>
+      <span class="week-theme">Days 15–21 · The practice becomes a pattern</span>
+    </div>
+    <div class="week-body">
+      <div class="day-row">
+        <div class="day-num">DAY 15</div>
+        <div class="day-content">
+          <div class="day-title">The end-of-day check-in</div>
+          <div class="day-body">Every evening this week: what did I feel today that I did not name aloud? What did I need that I did not give myself? What am I proud of — however small? Three lines. That is the practice.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 16</div>
+        <div class="day-content">
+          <div class="day-title">The full sequence — once</div>
+          <div class="day-body">Today, use the full sequence for your archetype: movement, then breath, then reframe. In that order. Notice whether doing them in sequence feels different to doing each one alone.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 17</div>
+        <div class="day-content">
+          <div class="day-title">Permission — practised</div>
+          <div class="day-body">Say this out loud: I am allowed to slow down. I am allowed to take up space. I am allowed to need things. Notice the discomfort. Sit with it briefly. Let it pass. That passing is the practice.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 18</div>
+        <div class="day-content">
+          <div class="day-title">The relational check</div>
+          <div class="day-body">Think of one person in your professional life who experiences your dysregulated pattern most directly. You do not need to tell them. Just hold them in mind. Then ask: what would change for them if I caught the signal ten minutes earlier?</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 19</div>
+        <div class="day-content">
+          <div class="day-title">Something restorative — protected</div>
+          <div class="day-body">Today, protect time for something that restores you specifically — not a general idea of restoration, but the thing that actually works for you. Movement, stillness, connection, creativity. Whatever is yours. Protect it before the day fills.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 20</div>
+        <div class="day-content">
+          <div class="day-title">The earliest signal — revisited</div>
+          <div class="day-body">Return to the earliest signal you identified in week one. Has it changed? Are you noticing it earlier now? The shrinking of the gap between signal and noticing is the evidence that the practice is working.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 21</div>
+        <div class="day-content">
+          <div class="day-title">The third reflection</div>
+          <div class="day-body">Three weeks in. What has genuinely shifted — even slightly? What has the practice revealed about your pattern that you did not know at the start? Write one honest paragraph. That paragraph is your evidence.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week-block">
+    <div class="week-header">
+      <h3>Week Four — Sustain</h3>
+      <span class="week-theme">Days 22–30 · Building what lasts</span>
+    </div>
+    <div class="week-body">
+      <div class="day-row">
+        <div class="day-num">DAY 22</div>
+        <div class="day-content">
+          <div class="day-title">The one practice that works</div>
+          <div class="day-body">By now you know which practice has had the most impact. Today, name it specifically. Write it down. That is the one you are keeping — not because the others do not matter, but because one consistent practice is worth ten inconsistent ones.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 23</div>
+        <div class="day-content">
+          <div class="day-title">The mantra — tested under pressure</div>
+          <div class="day-body">Today, notice a moment of pressure and use the mantra in it — not before or after, but in the middle of it. That is the real test of a mantra. It is not for calm moments. It is for this one.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 24</div>
+        <div class="day-content">
+          <div class="day-title">The peer conversation</div>
+          <div class="day-body">Regulation is relational. Today, have a conversation with one person from the session — or someone who understands what you are working on. Not to perform progress. To stay connected to the work. The conversation is part of the practice.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 25</div>
+        <div class="day-content">
+          <div class="day-title">Rest — without justification</div>
+          <div class="day-body">Today, rest without earning it first. Not because everything is done. Not as a reward. Just rest — because the regulated leader includes themselves in the care they give to everyone else.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 26</div>
+        <div class="day-content">
+          <div class="day-title">The full sequence revisited</div>
+          <div class="day-body">Movement, breath, reframe — the full sequence, used intentionally. Notice whether it feels different to day 16. The sequence should feel less effortful now. That ease is the practice becoming a pattern.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 27</div>
+        <div class="day-content">
+          <div class="day-title">What the people closest to you have noticed</div>
+          <div class="day-body">Ask one person — a colleague, a partner, a trusted friend — if they have noticed anything different in you over the past four weeks. You do not need to explain what you have been doing. Just listen to what they say.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 28</div>
+        <div class="day-content">
+          <div class="day-title">The next archetype edge</div>
+          <div class="day-body">Every archetype has a next layer. The Navigator who can pause is now working on stillness. The Anchor who breathes is now working on asking for what they need. What is your next edge? Name it. That is your next thirty days.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 29</div>
+        <div class="day-content">
+          <div class="day-title">The letter to yourself — revisited</div>
+          <div class="day-body">Return to what you wrote in the exercise section of this playbook — particularly the last question: what you now know. Read it. Does it still hold? Has the knowing deepened? What would you add?</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+      <div class="day-row">
+        <div class="day-num">DAY 30</div>
+        <div class="day-content">
+          <div class="day-title">The return</div>
+          <div class="day-body">Today, revisit the scenario from the session — the one that asked you to pause. What do you notice now that you did not see before? What has changed in how you understand your own pattern? That change is the work. That change is the point.</div>
+        </div>
+        <input type="checkbox" class="day-check">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px;">
+    <div class="card-title">Your reflection at day 30</div>
+    <div class="card-sub">Not a performance review — an honest account</div>
+    <div class="question-block">
+      <label>What has genuinely shifted in the past 30 days?</label>
+      <textarea placeholder="What I notice now that I didn't before..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>What is the one practice you are keeping beyond day 30?</label>
+      <textarea placeholder="The practice I am keeping is..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>What is the next edge — the thing the next 30 days will be for?</label>
+      <textarea placeholder="My next 30 days will be about..."></textarea>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 4 — RESOURCES -->
+<div id="resources" class="section">
+
+  <div class="section-header">
+    <div class="eyebrow">Resources</div>
+    <h2>Practices You Can Use Today</h2>
+    <p>Evidence-based, free and immediately available. Each link opens the specific practice — not a general page. Start with the one that matches your archetype's primary need.</p>
+  </div>
+
+  <div class="card-title" style="margin-bottom:16px;font-family:'Playfair Display',serif;font-size:20px;color:var(--forest);">Somatic Movement</div>
+  <div class="resource-grid">
+    <a class="resource-card" href="https://www.youtube.com/watch?v=eFSeEcGBKDQ" target="_blank">
+      <div class="r-type">YouTube · Somatic</div>
+      <div class="r-title">Somatic Shaking — TRE (Tension Release Exercises)</div>
+      <div class="r-desc">The evidence-based somatic shake practice — how and why the body releases tension through tremor. Suitable for all archetypes.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://www.youtube.com/watch?v=OlGNpGqzEKg" target="_blank">
+      <div class="r-type">YouTube · Somatic</div>
+      <div class="r-title">Somatic Movement for Stress Release</div>
+      <div class="r-desc">Gentle somatic movement sequence for releasing accumulated stress from the body. Particularly useful for the Anchor and Connector.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://www.youtube.com/watch?v=44K7sPRFBas" target="_blank">
+      <div class="r-type">YouTube · Body-based</div>
+      <div class="r-title">Body Scan Meditation — 10 Minutes</div>
+      <div class="r-desc">A clear, accessible body scan practice. Builds the interoceptive awareness that allows you to notice signals earlier rather than after the fact.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card-title" style="margin-bottom:16px;font-family:'Playfair Display',serif;font-size:20px;color:var(--forest);">Breathwork</div>
+  <div class="resource-grid">
+    <a class="resource-card" href="https://www.youtube.com/watch?v=rBdhqBGqiMc" target="_blank">
+      <div class="r-type">YouTube · Breath</div>
+      <div class="r-title">Physiological Sigh — Andrew Huberman</div>
+      <div class="r-desc">The science of the physiological sigh — two inhales, one long exhale. The fastest evidence-based tool for acute stress. No equipment, no app, 60 seconds.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://www.youtube.com/watch?v=nn1_qBiUmFY" target="_blank">
+      <div class="r-type">YouTube · Breath</div>
+      <div class="r-title">4-7-8 Breathing Technique</div>
+      <div class="r-desc">Inhale 4, hold 7, exhale 8. Activates the parasympathetic nervous system. Particularly effective for the Anchor pattern — signals to the body that it is safe to release.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://www.youtube.com/watch?v=tybOi4hjZFQ" target="_blank">
+      <div class="r-type">YouTube · Breath</div>
+      <div class="r-title">Box Breathing for Stress — Navy SEAL Technique</div>
+      <div class="r-desc">4 counts in, 4 hold, 4 out, 4 hold. Used in high-pressure environments. Particularly effective for the Navigator before high-stakes moments.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card-title" style="margin-bottom:16px;font-family:'Playfair Display',serif;font-size:20px;color:var(--forest);">Self-Compassion</div>
+  <div class="resource-grid">
+    <a class="resource-card" href="https://self-compassion.org/self-compassion-practices/#guided-meditations" target="_blank">
+      <div class="r-type">Practice · Free Audio</div>
+      <div class="r-title">Kristin Neff — Self-Compassion Break</div>
+      <div class="r-desc">The three-step self-compassion practice — three minutes, free audio, evidence-based. The practice recommended in your report. This is the link to the guided version.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://self-compassion.org/the-three-elements-of-self-compassion-2/" target="_blank">
+      <div class="r-type">Reading · Free</div>
+      <div class="r-title">The Three Elements of Self-Compassion</div>
+      <div class="r-desc">Self-kindness, common humanity, mindfulness. Neff's foundational framework explained clearly and briefly. The Architect particularly benefits from the conceptual grounding.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://www.youtube.com/watch?v=IvtZBUSplr4" target="_blank">
+      <div class="r-type">YouTube · Talk</div>
+      <div class="r-title">Kristin Neff — The Space Between Self-Esteem and Self-Compassion</div>
+      <div class="r-desc">The TEDx talk that explains why self-compassion outperforms self-esteem as a regulation strategy. Directly relevant to all four archetypes.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card-title" style="margin-bottom:16px;font-family:'Playfair Display',serif;font-size:20px;color:var(--forest);">Yoga &amp; Body-Based Practice</div>
+  <div class="resource-grid">
+    <a class="resource-card" href="https://www.youtube.com/watch?v=v7AYKMP6rOE" target="_blank">
+      <div class="r-type">YouTube · Yoga</div>
+      <div class="r-title">Yoga for Stress Relief — Yoga With Adriene</div>
+      <div class="r-desc">20 minutes. Free. No experience required. One of the most widely used and trusted free yoga resources available. Particularly suited to the Connector pattern.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://www.youtube.com/watch?v=U9YKY7fdwyg" target="_blank">
+      <div class="r-type">YouTube · Yoga</div>
+      <div class="r-title">Morning Yoga — 10 Minutes to Start the Day</div>
+      <div class="r-desc">A short morning practice that works as a daily anchor. Builds body awareness before the day takes over. Suitable for all archetypes as a morning regulation practice.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://www.youtube.com/watch?v=z6X5oEIg6Ak" target="_blank">
+      <div class="r-type">YouTube · Body-based</div>
+      <div class="r-title">Progressive Muscle Relaxation — Full Body</div>
+      <div class="r-desc">Tense and release each muscle group systematically. One of the most replicated findings in stress physiology — reliably reduces cortisol within a single session. Ideal for the Anchor.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card-title" style="margin-bottom:16px;font-family:'Playfair Display',serif;font-size:20px;color:var(--forest);">Apps &amp; Ongoing Support</div>
+  <div class="resource-grid">
+    <a class="resource-card" href="https://insighttimer.com" target="_blank">
+      <div class="r-type">App · Free</div>
+      <div class="r-title">Insight Timer</div>
+      <div class="r-desc">The largest free library of guided meditations, breathwork and body scans available. Thousands of five-minute practices. No subscription required for the core library.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://www.theinfluencelab.com" target="_blank">
+      <div class="r-type">Community</div>
+      <div class="r-title">The Influence Lab Community</div>
+      <div class="r-desc">Monthly live workshops with guest speakers, peer connection and a space where this work continues. If today resonated and you would like to go deeper.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+    <a class="resource-card" href="https://www.linkedin.com/in/kay-littlehales-minstsmm-2a434117" target="_blank">
+      <div class="r-type">LinkedIn</div>
+      <div class="r-title">Kay Littlehales — The Influence Lab</div>
+      <div class="r-desc">Follow for ongoing content on self-regulation, leadership development and the four archetypes. The work continues beyond the session.</div>
+      <span class="r-arrow">↗</span>
+    </a>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 5 — COMMITMENT -->
+<div id="commitment" class="section">
+
+  <div class="section-header">
+    <div class="eyebrow">My Commitment to Self</div>
+    <h2>The Three Things That Matter</h2>
+    <p>Not a plan. Not a list of intentions. Three specific commitments — to your pattern, your practice and your mantra. Written by you, for you, to return to when the insight has faded and the pattern is back.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">01 — My Pattern</div>
+    <div class="card-sub">What I now know about how I show up under pressure</div>
+    <div class="question-block">
+      <label>I am a...</label>
+      <div class="q-hint">Your archetype. In your own words — not the label, what it means for you specifically.</div>
+      <textarea rows="2" placeholder="I am someone who..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>Under pressure, my signal is...</label>
+      <div class="q-hint">The earliest tell. The thing that appears just before the pattern runs.</div>
+      <textarea rows="2" placeholder="The first sign is..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>The person who would most benefit from me catching this signal earlier is...</label>
+      <div class="q-hint">You do not have to name them aloud. Just hold them clearly in mind as you write.</div>
+      <textarea rows="2" placeholder="The person is..."></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">02 — My Practice</div>
+    <div class="card-sub">One thing. Consistent. Small enough to survive the hardest days.</div>
+    <div class="question-block">
+      <label>My one regulation practice is...</label>
+      <div class="q-hint">Specific enough that you will know whether you did it or not. Not a category — the actual practice.</div>
+      <textarea rows="2" placeholder="Every day, I will..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>I will do this when...</label>
+      <div class="q-hint">The trigger. The existing moment in the day it attaches to. What happens just before?</div>
+      <textarea rows="2" placeholder="The trigger is..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>My reframe question is...</label>
+      <div class="q-hint">The question you will ask yourself when the signal arrives. From your archetype practice.</div>
+      <textarea rows="2" placeholder="I will ask myself..."></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">03 — My Mantra</div>
+    <div class="card-sub">The sentence you will return to when the pattern kicks in</div>
+    <div class="question-block">
+      <label>My mantra is...</label>
+      <div class="q-hint">From your archetype slide — or written in your own words if something else fits better. Short enough to say in a breath.</div>
+      <textarea rows="2" placeholder="My mantra is..."></textarea>
+    </div>
+    <div class="question-block">
+      <label>In 30 days, I want to notice...</label>
+      <div class="q-hint">Not a goal. Not a metric. What would be different if the practice is working — in your body, your leadership, your relationships?</div>
+      <textarea rows="3" placeholder="In 30 days, I hope to notice..."></textarea>
+    </div>
+  </div>
+
+  <div class="mantra-box" style="margin-top:32px;">
+    <div class="m-label">A Final Note from Kay</div>
+    <div class="m-text" style="font-size:18px;margin-bottom:16px;">"You cannot regulate others from a place you have not visited in yourself."</div>
+    <p style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;max-width:520px;margin:0 auto;">The work you did today is real. The insight you have right now is real. The practice is keeping it real when the pressure returns and the pattern offers itself as the easier path. Return to this playbook. Return to the exercise. Return to the commitment. The regulation is in the returning.</p>
+    <p style="font-size:12px;color:var(--mint);margin-top:16px;">Kay Littlehales · The Influence Lab · theinfluencelab.com</p>
+  </div>
+
+  <button class="btn-print" onclick="window.print()">Save or Print This Playbook</button>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  © Kay Littlehales · The Influence Lab · theinfluencelab.com · Confidential — prepared for MMU participants · June 2026
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function selectArchetype(id) {
+  document.querySelectorAll('.archetype-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.plan-section').forEach(p => p.classList.remove('visible'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('arch-' + id).classList.add('visible');
+}
+
+// Persist checkboxes in localStorage
+document.querySelectorAll('.day-check').forEach((cb, i) => {
+  const key = 'day_' + i;
+  cb.checked = localStorage.getItem(key) === 'true';
+  cb.addEventListener('change', () => localStorage.setItem(key, cb.checked));
+});
+
+// Persist textareas
+document.querySelectorAll('textarea').forEach((ta, i) => {
+  const key = 'ta_' + i;
+  ta.value = localStorage.getItem(key) || '';
+  ta.addEventListener('input', () => localStorage.setItem(key, ta.value));
+});
+</script>
+</body>
+</html>

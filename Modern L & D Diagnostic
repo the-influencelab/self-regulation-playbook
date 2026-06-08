@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Drift-to-Drive Diagnostic™ · Kay Littlehales MInstSMM</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:#FAFDF8;color:#1A1A1A;min-height:100vh;}
+.wrap{max-width:760px;margin:0 auto;padding:40px 24px;}
+.hidden{display:none!important;}
+.btn-primary{background:#1E4A1A;color:white;padding:14px 32px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s;margin-top:16px;}
+.btn-primary:hover{background:#2D5A27;}
+.btn-primary:disabled{background:#C4D4C0;cursor:not-allowed;}
+.btn-ghost{background:transparent;border:1.5px solid #D4EFE0;color:#6B7B6A;padding:10px 22px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-ghost:hover{border-color:#4A8C3F;color:#1E4A1A;}
+/* PROGRESS */
+.prog-wrap{margin-bottom:26px;}
+.prog-info{display:flex;justify-content:space-between;font-size:11px;color:#8FAD8E;margin-bottom:7px;}
+.prog-bar{height:4px;background:#D4EFE0;border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#4A8C3F,#8FD5A6);border-radius:4px;transition:width .4s;}
+/* SECTION */
+.sec-header{background:#1E4A1A;border-radius:10px;padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;gap:14px;}
+.sec-num{width:36px;height:36px;border-radius:50%;background:rgba(143,213,166,.12);border:1.5px solid rgba(143,213,166,.25);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#8FD5A6;flex-shrink:0;}
+.sec-tag{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(143,213,166,.5);margin-bottom:3px;}
+.sec-name{font-family:'Playfair Display',serif;font-size:17px;color:white;font-weight:700;}
+/* QUESTION */
+.q-card{background:white;border:1px solid #D4EFE0;border-radius:10px;padding:22px 24px;margin-bottom:12px;}
+.q-num{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4A8C3F;margin-bottom:8px;}
+.q-text{font-size:14px;color:#1E2E1C;line-height:1.7;margin-bottom:18px;font-weight:500;}
+.mc-options{display:flex;flex-direction:column;gap:9px;}
+.mc-btn{width:100%;text-align:left;padding:13px 16px;border:1.5px solid #D4EFE0;border-radius:8px;background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;color:#3A4A38;line-height:1.6;transition:all .15s;font-weight:300;}
+.mc-btn:hover{border-color:#4A8C3F;background:#F5FBF5;}
+.mc-btn.sel{color:white;}
+.mc-btn.sel[data-v="1"]{background:#B85C38;border-color:#B85C38;}
+.mc-btn.sel[data-v="2"]{background:#C87840;border-color:#C87840;}
+.mc-btn.sel[data-v="3"]{background:#9A8020;border-color:#9A8020;}
+.mc-btn.sel[data-v="4"]{background:#3A7A34;border-color:#3A7A34;}
+.mc-btn.sel[data-v="5"]{background:#1E4A1A;border-color:#1E4A1A;}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:22px;}
+.q-ctr{font-size:12px;color:#8FAD8E;}
+/* GATE */
+.gate-wrap{background:white;border:1px solid #D4EFE0;border-radius:14px;padding:32px;margin-bottom:20px;text-align:center;}
+.gate-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#1E4A1A;margin-bottom:8px;}
+.gate-sub{font-size:13px;color:#6B7B6A;line-height:1.8;font-weight:300;max-width:480px;margin:0 auto 24px;}
+.gate-form{display:flex;flex-direction:column;gap:10px;max-width:420px;margin:0 auto;}
+.gate-input{padding:13px 16px;border:1.5px solid #D4EFE0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#1E4A1A;background:#FAFDF8;outline:none;}
+.gate-input:focus{border-color:#4A8C3F;}
+.gate-btn{background:#1E4A1A;color:white;padding:14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;margin-top:4px;}
+.gate-privacy{font-size:10px;color:#A0B09E;margin-top:8px;}
+/* RESULTS */
+.r-header{background:#1E4A1A;border-radius:12px;padding:30px;margin-bottom:20px;}
+.r-badge{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#8FD5A6;margin-bottom:6px;}
+.r-stage{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:white;margin-bottom:4px;}
+.r-stage em{color:#8FD5A6;font-style:normal;}
+.r-score-row{display:flex;align-items:baseline;gap:8px;margin-bottom:16px;}
+.r-score{font-family:'Playfair Display',serif;font-size:56px;font-weight:900;color:#FFE600;line-height:1;}
+.r-score-lbl{font-size:13px;color:rgba(255,255,255,.4);}
+.r-profile{font-size:13px;color:rgba(255,255,255,.68);line-height:1.85;font-weight:300;}
+.ob-wrap{background:white;border:1px solid #D4EFE0;border-radius:10px;padding:20px 22px;margin-bottom:16px;}
+.ob-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4A8C3F;margin-bottom:12px;}
+.sp-bar{height:14px;border-radius:20px;background:linear-gradient(90deg,#B85C38 0%,#D4844A 25%,#E8C547 48%,#8FD5A6 72%,#1E4A1A 100%);position:relative;margin-bottom:10px;}
+.sp-ptr{position:absolute;top:-6px;width:26px;height:26px;border-radius:50%;background:white;border:3px solid #FFE600;transform:translateX(-50%);transition:left 1s ease;box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.sp-stages{display:flex;justify-content:space-between;font-size:9px;color:#8FAD8E;font-weight:600;text-transform:uppercase;}
+.bd-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4A8C3F;margin:20px 0 12px;display:flex;align-items:center;gap:8px;}
+.bd-label::before{content:'';width:16px;height:2px;background:#4A8C3F;}
+.b-row{background:white;border:1px solid #D4EFE0;border-radius:8px;padding:14px 18px;margin-bottom:8px;}
+.b-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.b-name{font-size:13px;font-weight:600;color:#1E4A1A;}
+.b-score{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;}
+.b-bar{height:6px;background:#EBF5EE;border-radius:6px;overflow:hidden;margin-bottom:6px;}
+.b-fill{height:100%;border-radius:6px;transition:width .9s ease;}
+.b-note{font-size:11px;color:#8FAD8E;font-style:italic;}
+.arch-hero{border-radius:14px;padding:32px;margin-bottom:16px;position:relative;overflow:hidden;}
+.arch-eyebrow{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:6px;}
+.arch-type{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FFE600;margin-bottom:8px;}
+.arch-name{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,40px);font-weight:900;color:white;margin-bottom:6px;line-height:1.1;}
+.arch-tagline{font-size:14px;color:rgba(255,255,255,.65);font-style:italic;line-height:1.6;}
+.arch-body{background:white;border:1px solid #D4EFE0;border-radius:12px;padding:26px;margin-bottom:14px;}
+.arch-section-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4A8C3F;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.arch-section-label::before{content:'';display:block;width:14px;height:2px;background:#4A8C3F;}
+.arch-para{font-size:13px;color:#2A3A28;line-height:1.9;font-weight:300;margin-bottom:12px;}
+.arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.arch-card{border-radius:8px;padding:16px;}
+.arch-card.keeping{background:#FEF8EE;border:1px solid #E8D5A0;}
+.arch-card.need{background:#F2F8F0;border:1px solid #C0DFB0;}
+.arch-card-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6B7B6A;margin-bottom:6px;}
+.arch-card-text{font-size:12px;color:#2A3A28;line-height:1.8;font-weight:300;}
+.course-wrap{display:flex;flex-direction:column;gap:10px;}
+.course-card{background:white;border:1px solid #D4EFE0;border-radius:10px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start;}
+.course-icon{font-size:22px;flex-shrink:0;}
+.course-title{font-size:13px;font-weight:600;color:#1E4A1A;margin-bottom:3px;}
+.course-desc{font-size:12px;color:#6B7B6A;line-height:1.7;font-weight:300;margin-bottom:6px;}
+.course-tag{font-size:10px;font-weight:700;padding:3px 10px;border-radius:12px;}
+.course-tag.book{background:#FEF3E8;color:#8B4A10;}
+.course-tag.course{background:#E8F5EE;color:#1E6B38;}
+.course-tag.coaching{background:#EEF2FF;color:#3A40A0;}
+.ref-box{background:#F2F8F0;border-left:4px solid #4A8C3F;border-radius:0 8px 8px 0;padding:22px 24px;margin-top:20px;}
+.ref-lbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4A8C3F;margin-bottom:6px;}
+.ref-title{font-family:'Playfair Display',serif;font-size:17px;color:#1E4A1A;margin-bottom:12px;}
+.ref-q{font-size:13px;color:#3A4A38;line-height:1.8;margin-bottom:8px;padding-left:16px;position:relative;font-weight:300;}
+.ref-q::before{content:'→';position:absolute;left:0;color:#4A8C3F;font-weight:700;}
+.stage-insight{margin-top:20px;border-radius:12px;overflow:hidden;border:1px solid #D4EFE0;}
+.si-header{padding:18px 22px 14px;border-bottom:1px solid #D4EFE0;}
+.si-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4A8C3F;margin-bottom:6px;}
+.si-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#1E4A1A;margin-bottom:8px;}
+.si-def{font-size:13px;color:#3A4A38;line-height:1.85;font-weight:300;}
+.si-body{padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.si-col-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.si-col-label.pros{color:#3A7A34;}
+.si-col-label.cons{color:#B85C38;}
+.si-item{font-size:12px;color:#3A4A38;line-height:1.7;font-weight:300;padding:8px 10px 8px 12px;border-radius:6px;margin-bottom:6px;}
+.si-item.pro{background:#F2FAF5;border-left:3px solid #3A7A34;}
+.si-item.con{background:#FDF5F2;border-left:3px solid #B85C38;}
+.si-relevance{background:#F2F8F0;border-top:1px solid #D4EFE0;padding:16px 22px;}
+.si-rel-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4A8C3F;margin-bottom:6px;}
+.si-rel-text{font-size:12px;color:#3A4A38;line-height:1.8;font-weight:300;}
+.wl-wrap{background:#1E4A1A;border-radius:14px;padding:28px;margin-top:20px;}
+.wl-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#8FD5A6;margin-bottom:8px;}
+.wl-title{font-family:'Playfair Display',serif;font-size:22px;color:white;font-weight:700;margin-bottom:8px;}
+.wl-sub{font-size:13px;color:rgba(255,255,255,.65);line-height:1.8;font-weight:300;margin-bottom:20px;}
+.wl-form{display:flex;flex-direction:column;gap:10px;max-width:440px;}
+.wl-input{padding:12px 16px;border:1.5px solid rgba(143,213,166,.25);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:white;background:rgba(255,255,255,.06);outline:none;}
+.wl-btn{background:#FFE600;color:#1E4A1A;padding:14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;}
+.wl-confirm{background:rgba(143,213,166,.1);border:1px solid rgba(143,213,166,.25);border-radius:8px;padding:16px 20px;text-align:center;display:none;}
+.wl-confirm-text{font-size:13px;color:#8FD5A6;line-height:1.7;}
+.copyright{font-size:10px;color:#A0B09E;text-align:center;margin-top:24px;line-height:1.6;}
+@media(max-width:480px){.arch-grid{grid-template-columns:1fr;}.course-card{flex-direction:column;}.si-body{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- INTRO -->
+<div id="intro">
+  <div style="background:#1E4A1A;border-radius:16px;padding:40px 36px 36px;margin-bottom:20px;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(143,213,166,.1);border:1px solid rgba(143,213,166,.2);border-radius:20px;padding:5px 14px;margin-bottom:16px;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#8FD5A6;display:inline-block;"></span>
+      <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8FD5A6;">The Influence Lab · Kay Littlehales MInstSMM</span>
+    </div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,52px);font-weight:900;color:white;line-height:1.05;margin-bottom:10px;">The Drift-to-Drive<br/><span style="color:#8FD5A6;">Diagnostic™</span></h1>
+    <p style="font-size:15px;color:rgba(255,255,255,.6);font-weight:300;margin-bottom:24px;line-height:1.7;">Not a skills test. Not a knowledge assessment. A professional mirror — built for the collective future of L&amp;D and HR.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:20px;">
+      <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#FFE600;">30</div><div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;">Questions</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.1);"></div>
+      <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#FFE600;">5</div><div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;">Behaviours</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.1);"></div>
+      <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#FFE600;">8–10</div><div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;">Minutes</div></div>
+    </div>
+  </div>
+  <p style="font-size:13px;color:#6B7B6A;line-height:1.8;margin-bottom:20px;font-style:italic;">Thirty questions across five courage behaviours. Allow yourself eight to ten minutes of quiet, honest reflection. The entire value of this diagnostic is in your honesty with yourself.</p>
+  <button class="btn-primary" onclick="start()">Begin the Diagnostic →</button>
+</div>
+
+<!-- DIAGNOSTIC -->
+<div id="diag" style="display:none;">
+  <div class="prog-wrap">
+    <div class="prog-info"><span id="pt">Section 1 of 5</span><span id="qp">0 of 30 answered</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+  </div>
+  <div id="sc"></div>
+  <div class="nav-row">
+    <button class="btn-ghost" id="bb" onclick="back()" style="visibility:hidden">← Back</button>
+    <span class="q-ctr" id="qc"></span>
+    <button class="btn-primary" id="bn" onclick="next()" disabled>Next Section →</button>
+  </div>
+</div>
+
+<!-- EMAIL GATE -->
+<div id="gate" style="display:none;">
+  <div class="r-header">
+    <div class="r-badge">The Drift-to-Drive Diagnostic™ · The Influence Lab 2026</div>
+    <div class="r-stage">You have completed the diagnostic</div>
+    <div class="r-profile" style="margin-top:8px;">Your full archetype profile, personalised breakdown and next steps are ready. Enter your details below to unlock them.</div>
+  </div>
+  <div class="gate-wrap">
+    <div class="gate-title">Unlock Your Full Profile</div>
+    <div class="gate-sub">Enter your details to access your complete archetype report — including your named archetype, personalised narrative and your exact next step.</div>
+    <div class="gate-form">
+      <input class="gate-input" id="g-name" type="text" placeholder="Your full name" />
+      <input class="gate-input" id="g-email" type="email" placeholder="Your email address" />
+      <input class="gate-input" id="g-org" type="text" placeholder="Your organisation" />
+      <button class="gate-btn" onclick="unlockResults()">Unlock My Profile →</button>
+    </div>
+    <p class="gate-privacy">Your details are held securely and used only to send you your results and relevant updates from The Influence Lab.</p>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results" style="display:none;">
+  <div class="r-header">
+    <div class="r-badge">Your Drift-to-Drive Profile · The Influence Lab 2026</div>
+    <div class="r-stage">You are in: <em id="rs"></em></div>
+    <div class="r-score-row"><div class="r-score" id="rsc"></div><div class="r-score-lbl">out of 100</div></div>
+    <div class="r-profile" id="rp"></div>
+  </div>
+  <div class="ob-wrap">
+    <div class="ob-label">Your Position on the Drift-to-Drive Spectrum</div>
+    <div class="sp-bar"><div class="sp-ptr" id="spp" style="left:2%"></div></div>
+    <div class="sp-stages"><span>Deep Drift</span><span>Passive Drift</span><span>Aware Drift</span><span>Early Drive</span><span>Full Drive</span></div>
+  </div>
+  <div class="bd-label">Your Five Courage Behaviour Scores</div>
+  <div id="bdr"></div>
+  <div id="archetype-panel" style="margin-top:24px;"></div>
+  <div id="stage-insight"></div>
+  <div class="ref-box">
+    <div class="ref-lbl">Your Coaching Reflection</div>
+    <div class="ref-title" id="rrt"></div>
+    <div id="rrq"></div>
+  </div>
+  <div style="margin-top:24px;">
+    <div style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4A8C3F;margin-bottom:14px;">Your Next Steps</div>
+    <div id="course-panel" class="course-wrap"></div>
+  </div>
+  <div class="wl-wrap">
+    <div class="wl-label">Go Deeper</div>
+    <div class="wl-title">Join the Waiting List for Modern L&amp;D: From Drift to Drive</div>
+    <div class="wl-sub">The book, the programme and the community. Be the first to know when they launch.</div>
+    <div class="wl-form" id="wl-form">
+      <input class="wl-input" id="wl-name" type="text" placeholder="Your full name" />
+      <input class="wl-input" id="wl-email" type="email" placeholder="Your email address" />
+      <input class="wl-input" id="wl-org" type="text" placeholder="Your organisation" />
+      <button class="wl-btn" onclick="joinWaitlist()">Join the Waiting List</button>
+    </div>
+    <div class="wl-confirm" id="wl-confirm">
+      <div style="font-size:28px;margin-bottom:6px;">✅</div>
+      <div class="wl-confirm-text">You are on the list. Kay will be in touch.</div>
+    </div>
+  </div>
+  <div class="copyright">The Drift-to-Drive Diagnostic™ is the original intellectual property of Kay Littlehales and The Influence Lab 2026.<br/>© Kay Littlehales MInstSMM · Written by a Human · Designed with AI · Not to be reproduced without written permission.</div>
+  <div style="text-align:center;margin-top:16px;"><button class="btn-ghost" onclick="retake()">↺ Retake the Diagnostic</button></div>
+</div>
+
+</div>
+<script>
+
+const S=[
+  {num:"01",tag:"Commercial Courage",name:"Think Like a Business Owner",qs:[
+    {q:"When I recommend a learning solution, I think about it in terms of…",o:["Getting the session planned and delivered on time.","Making sure the content is relevant and that delegates enjoy it.","How it connects to what the business is trying to achieve right now.","The specific behaviour change it needs to produce and how I will measure that against a business outcome."]},
+    {q:"When I sit in a meeting with senior leaders, I feel…",o:["Slightly out of my depth — their world feels separate from mine.","Comfortable enough, but I mostly listen rather than lead the conversation.","Confident contributing, especially when the conversation touches on people and capability.","Genuinely at home — I speak the language of the business and they treat me as a peer."]},
+    {q:"When I think about how I measure success in my role, I would say…",o:["I track completions, attendance and how well the session was rated.","I track some outcomes but I know the data I collect doesn't fully prove impact.","I measure behaviour change as well as reaction, and I can connect some of my work to business results.","Everything I do has a clear success measure tied to a business outcome. I report on impact, not activity."]},
+    {q:"When a business challenge lands on my desk, my first instinct is to…",o:["Think about what training programme would address it.","Ask some questions before recommending — but training is usually where I land.","Diagnose the root cause first. Training might be the answer, but it might not.","Challenge the framing of the problem before I even think about a solution."]},
+    {q:"When I think about how I influence decision-makers in my organisation, I would say…",o:["I don't really see influencing as part of my role — I respond to what I'm asked.","I try to influence but I'm not sure my voice lands at the level it needs to.","I build relationships with key stakeholders and use data and stories to make my case.","I am a credible influence on strategic decisions. Leaders seek my input before committing to direction."]},
+    {q:"When I consider my current role and how it is positioned in the organisation, I would say…",o:["L&D or HR is seen as an administrative or compliance function where I work.","We are respected but mostly reactive — brought in to solve problems rather than prevent them.","We have a seat at the table for some strategic conversations and I am working to deepen that.","L&D or HR is seen as a genuine strategic partner. I am involved in decisions from the outset."]}
+  ]},
+  {num:"02",tag:"Relational Courage",name:"Challenge, Stretch and Hold Space",qs:[
+    {q:"When a stakeholder asks me to design and deliver a programme I have reservations about, I…",o:["Deliver what is asked. It is not my place to question the brief.","Note my concerns privately but usually go ahead without raising them.","Ask gentle questions and try to nudge the brief in a better direction.","Have a direct and honest conversation about my concerns, with evidence, before agreeing to anything."]},
+    {q:"When I am facilitating and the room gets uncomfortable — silence, conflict, an emotional moment — I…",o:["Move things on quickly. Discomfort feels unsafe and I want to protect the group.","Acknowledge it briefly and steer toward safer ground.","Hold the space for a while and trust the group, though I sometimes step in too soon.","Welcome it. I know discomfort is where the most significant learning happens and I am skilled enough to work with it."]},
+    {q:"When I think about the professional conversations I avoid, I would say…",o:["There are several I consistently avoid — with leaders, stakeholders or colleagues.","There are one or two I have been putting off. I know I need to have them.","I have most of the conversations I need to, though I sometimes soften them more than I should.","I have the conversations that need to be had. I have learned to be honest with care rather than kind at the expense of truth."]},
+    {q:"When I think about stretching learners beyond their comfort zone, I feel…",o:["Nervous. I worry about negative feedback or people feeling unsafe.","I stretch people sometimes, but I pull back when I sense resistance.","Comfortable creating stretch, and I am getting better at holding it without rescuing people.","This is one of my strengths. I know how to take people to the edge of their comfort and work with them there."]},
+    {q:"When I think about how I influence the people I work with — colleagues, leaders, learners — I would say…",o:["I don't think about influencing. I focus on delivering well.","I rely mainly on my expertise to persuade people. If the content is good, it speaks for itself.","I adapt how I communicate to different audiences and I am building my ability to influence without authority.","Influencing is central to how I work. I shape thinking, shift perspectives and create movement in people — that is my craft."]},
+    {q:"When a colleague or leader pushes back on something I believe is right, my usual response is to…",o:["Back down. It's not worth the conflict and I'm probably missing something.","Hold my position briefly, then find a compromise that keeps everyone comfortable.","Make my case clearly and listen to their view — I'll adapt if they persuade me, but I won't just fold.","Hold the tension. I can sit with disagreement, hear them fully and still stand in my conviction when I know I'm right."]}
+  ]},
+  {num:"03",tag:"Creative Courage",name:"Grow and Prosper Through Co-Creation",qs:[
+    {q:"When I design a learning programme or intervention, I typically…",o:["Build it myself based on the brief and deliver it to the learners.","Consult with a manager or subject matter expert before designing.","Involve learners and stakeholders in the design process, though not as consistently as I would like.","Co-create from the start — with learners, SMEs, operational leaders and sometimes the community itself."]},
+    {q:"When something I have designed or delivered has not worked well, I…",o:["Feel responsible and a little defensive about it.","Reflect privately and try to improve it next time.","Debrief with the team and make changes, though I sometimes take it personally.","Treat it as useful data and a shared learning experience. Failure is part of the design process."]},
+    {q:"When I think about how I am growing as an L&D or HR professional right now, I would say…",o:["I am focused on doing my job well. My own development feels like something I'll get to later.","I read articles and attend the occasional webinar, but I don't have a structured approach to my own growth.","I am part of at least one community or network and I am actively developing my practice.","My own development is a genuine priority. I am in communities, reading, experimenting and seeking challenge."]},
+    {q:"When I think about the skills I most need to develop to stay relevant in the next two years, I would say…",o:["I haven't thought about it in structured terms. I develop as things come up.","I know I need to upskill but I'm not sure where to focus first.","I have identified two or three specific areas — data literacy, facilitation, commercial acumen — and I am working on them.","I have a clear personal development roadmap and I am actively investing in the skills the modern profession demands."]},
+    {q:"When I think about using AI tools in my work as an L&D or HR professional, I would say…",o:["I haven't really started. I'm not sure where AI fits in what I do.","I've experimented a little but I don't use AI consistently or with a clear purpose.","I use AI tools regularly to save time and enhance my work, though I'm still learning how to use them well.","AI is embedded in how I work. I use it to accelerate design, analyse data, personalise learning and generate insight — and I understand its limits."]},
+    {q:"When I think about the people I work with and the solutions I create, I would say…",o:["I mostly deliver to people — they come to the programme and I facilitate it.","I try to involve people but ownership usually stays with me.","There is a sense of shared ownership in some of my work, and I am building more of it.","The people I work with feel genuine ownership of the learning. We built it together and they carry it forward."]}
+  ]},
+  {num:"04",tag:"Identity Courage",name:"Know Your Professional Identity",qs:[
+    {q:"If someone asked me to describe my professional values in one minute, I would…",o:["Struggle to articulate them clearly. I haven't thought about it in those terms.","Give a general answer about wanting to help people and make a difference.","Be able to name two or three values that feel genuinely mine, though I don't always live by them under pressure.","Give a clear, considered answer that reflects how I actually make decisions every day."]},
+    {q:"When the L&D or HR function is undervalued or overlooked in my organisation, I…",o:["Feel frustrated and defeated. It confirms a nagging sense that what I do doesn't really matter.","Accept it as the reality of the profession and try not to take it personally.","Challenge the perception where I can and look for ways to demonstrate value, though it takes its toll.","Feel settled. My sense of professional worth doesn't depend on whether others understand it. I know what I contribute."]},
+    {q:"When I am under pressure from a stakeholder to do something I don't believe is right, I…",o:["Usually go along with it. It's easier and safer than pushing back.","Express mild concern but ultimately deliver what is asked.","Push back more often than not, though I sometimes compromise more than I should.","Hold my professional ground with confidence and evidence. I adapt my style without abandoning my values."]},
+    {q:"When I think about what makes me distinctive as an L&D or HR professional, I would say…",o:["I'm not sure I am particularly distinctive. I do a solid job but couldn't articulate what sets me apart.","I have some strengths, though I find it hard to talk about them without feeling like I'm showing off.","I know what I'm good at and I'm getting better at owning it and talking about it.","I have a clear sense of my distinctive contribution and I'm not shy about naming it. My identity is my credibility."]},
+    {q:"When I think about how AI is changing the L&D and HR profession, my honest reaction is…",o:["Anxiety. I worry about what it means for my role and whether I will be relevant.","Cautious interest — I can see the potential but I'm not sure how to engage with it confidently.","Curious and mostly optimistic — I see AI as something to work with rather than fear, and I'm actively learning.","Energised. I understand that AI will automate what is routine and amplify what is human. I know which side of that line I sit on."]},
+    {q:"When I consider how my organisation currently uses AI in people practices — hiring, learning, performance — I would say…",o:["I'm not sure we use AI in these areas, or if we do I'm not involved in those decisions.","We use some AI tools but mostly for efficiency. I haven't thought critically about the implications.","I am aware of how AI is being used and I have some concerns about fairness and transparency that I am beginning to raise.","I actively advocate for ethical AI use in our people practices. I ask hard questions about bias, consent, transparency and human oversight."]}
+  ]},
+  {num:"05",tag:"Deep Courage",name:"Deep Self-Awareness",qs:[
+    {q:"When I am in a challenging professional situation, my awareness of my own body is…",o:["I honestly don't pay much attention to what my body is doing. I just get on with it.","I notice some tension or discomfort but I don't really know what to do with it.","I am becoming more aware of my physical responses and starting to use that awareness to make better choices.","I listen to my body as a source of intelligence. It tells me things my thinking mind misses, and I act on that."]},
+    {q:"When I think about the patterns I repeat in my professional life — how I respond to authority, conflict or failure — I would say…",o:["I haven't thought about it in those terms. I just respond how I respond.","I'm aware I have some patterns but I haven't done much to understand or change them.","I'm actively noticing my patterns and beginning to understand where some of them come from.","I have done meaningful work on my own shadow — the unconscious patterns that used to run my practice. I know them and I work with them."]},
+    {q:"When I think about my investment in my own inner development — coaching, supervision, reflective practice — I would say…",o:["It's not something I prioritise. I focus on external development — skills, knowledge, qualifications.","I do some reflection but it's mostly informal and I don't give it much dedicated time.","I have a reflective practice and I invest in my own inner development, though not as consistently as I'd like.","My inner development is a non-negotiable. I invest in it regularly and consider it the foundation of everything else I do."]},
+    {q:"When I think about the statement 'you cannot take someone somewhere you have not been yourself', I feel…",o:["It's a nice idea but I'm not sure it applies to my work practically.","It resonates but I'm honest enough to admit I sometimes ask more of others than I ask of myself.","I feel this deeply and it motivates me to keep doing my own work, even when it's uncomfortable.","This is the belief that drives my entire practice. My rooms feel exactly as courageous as I am."]},
+    {q:"When I am honest about my fears around AI and what it means for my professional future, I would say…",o:["I am genuinely worried. I don't know how to position myself in a world where AI can do so much of what I do.","I have some anxiety about it but I push it away rather than face it directly.","I have sat with the fear and I am beginning to understand what it is telling me — mostly that I need to keep developing.","I have moved through the fear. I know that the most human parts of what I do — judgment, presence, courage, connection — cannot be automated."]},
+    {q:"When I think about what it means to use AI ethically in my professional practice, I would say…",o:["I haven't thought about AI ethics in relation to my own work specifically.","I know ethics in AI matters but I wouldn't know how to apply that thinking practically in my role.","I think about transparency, bias and human oversight when I use or recommend AI tools, even if I'm still learning.","Ethical AI use is something I take seriously and advocate for. I ask who benefits, who might be harmed, and whether there is meaningful human oversight in every AI-enabled decision."]}
+  ]}
+];
+
+const stageInsights={
+  "Deep Drift":{
+    def:"Deep Drift describes a professional who has settled into a pattern of reactive, order-taking practice. The work gets done — sessions are delivered, content is created, requests are fulfilled — but the practice is disconnected from strategic intent, business impact and professional growth. It is not laziness. It is often the result of years of conditioning in organisations that never asked for more.",
+    pros:["Reliable and consistent in delivery","Low conflict — rarely pushes back on requests","Technically competent within established routines","Trusted to fulfil the brief as given"],
+    cons:["Invisible at leadership level — not seen as a strategic voice","Little to no measurement of actual impact","High risk of redundancy as AI replaces routine delivery","Professional identity is fragile — defined by output, not contribution","Burnout risk from being permanently in production mode"],
+    relevance:"In the current L&D landscape, organisations are under pressure to prove the ROI of learning investment. L&D professionals who remain in Deep Drift are increasingly vulnerable — not because they lack skill, but because they lack visibility and strategic positioning. The profession is at a crossroads: those who stay here will find themselves replaced by automation. Those who move will define what modern L&D becomes."
+  },
+  "Passive Drift":{
+    def:"Passive Drift is the stage of unexpressed potential. The professional here has real capability — they know more than they show, see more than they say, and sense that there is a bigger version of their practice waiting. But the default is still safe. Conversations are managed rather than led. Briefs are accepted rather than challenged. The instinct to step up exists — it just keeps getting deferred.",
+    pros:["More self-aware than Deep Drift — can see where change is needed","Genuinely capable and often respected by peers","Willing to develop, even if inconsistently","Good relational awareness — reads the room well"],
+    cons:["Consistent gap between knowing and doing","Tends to absorb more than they can process — says yes too readily","Professional voice is underused in stakeholder conversations","Growth is reactive rather than intentional","Prone to imposter syndrome, which reinforces safe behaviour"],
+    relevance:"This stage is where a significant proportion of experienced L&D professionals sit — and it is one of the most costly places for both the individual and the organisation. The profession loses enormous value when capable people hold back. For the modern L&D leader, breaking out of Passive Drift is not a skills problem — it is a courage problem. The question is not 'can I do this?' but 'will I choose to?'"
+  },
+  "Aware Drift":{
+    def:"Aware Drift — the Courage Point — is the most charged position on the continuum. This professional understands the model, has done some of the thinking, and can articulate exactly what Drive looks like. They are often the person in the room who sees what needs to change. But seeing it and consistently acting on it are different things. The gap here is not knowledge. It is the habit of hesitation in the moment it matters most.",
+    pros:["High self-awareness — genuinely understands their own patterns","Can speak the language of impact and strategy","Trusted by peers and beginning to build stakeholder credibility","Already moving — this is not a fixed state, it is a live decision point"],
+    cons:["Can get stuck in analysis — thinking rather than acting","Inconsistency: operates in Drive sometimes, retreats in high-pressure moments","Frustrating for those around them who can see what they are capable of","Risk of intellectualising the journey rather than committing to it","Can use self-awareness as a shield rather than a springboard"],
+    relevance:"The Courage Point is where the modern L&D profession is being asked to grow right now. Organisations need L&D professionals who can move from knowing to doing — from designing learning to leading change. The professionals who break through Aware Drift become the ones who shape culture, challenge assumptions and sit at the table where decisions are made. Those who do not break through remain consultants to themselves — full of insight, short on impact."
+  },
+  "Early Drive":{
+    def:"Early Drive is the stage of active, intentional professional practice. The professional here has made a genuine commitment to something beyond delivery — to impact, to influence, to being a force for change rather than a fulfiller of requests. They are visible in the business, they hold their ground with evidence, they challenge briefs and build real relationships with stakeholders. The practice is not perfect — there are still moments of retreat — but the direction is clear and the commitment is real.",
+    pros:["Commercially credible — speaks the language of the business","Builds trust through outcomes, not just relationships","Courageous in the room — can challenge, redirect and hold a position","Growing professional identity — clear about what they stand for","Increasingly visible at senior level"],
+    cons:["Can overcorrect — drive and directness without enough relational attunement","Sustaining Drive requires ongoing inner work — neglect this and regression is real","May struggle to bring the rest of the team with them","The gap between their practice and those still in Drift can create friction","Not yet fully consistent — high-pressure moments can still produce retreat"],
+    relevance:"Early Drive is where the modern L&D profession needs its critical mass to sit. These are the professionals who are redefining what L&D means in their organisations — moving the function from training provider to strategic partner. In a world where AI is automating the delivery layer of learning, the human who can think, challenge, connect and lead is irreplaceable. Early Drive is not a ceiling — it is a launchpad."
+  },
+  "Full Drive":{
+    def:"Full Drive is the stage of mature, integrated professional presence. This professional has done the inner work alongside the outer work. They are commercially credible, relationally courageous, creatively bold and grounded in a clear professional identity. They do not need external validation to know their worth. They are in the rooms where decisions are made, and they speak in those rooms with clarity and conviction. But what truly distinguishes Full Drive is this: the professional here understands that their most important job is to raise the standard of everyone around them.",
+    pros:["Strategic voice — genuinely influences organisational direction","Deep credibility built on outcomes, relationships and integrity","Psychologically resilient — does not collapse under pressure or criticism","Clear professional identity — knows exactly what they stand for and why","Acts as a force multiplier — elevates the practice of the people around them"],
+    cons:["Risk of isolation — can feel ahead of the culture they are working in","Responsibility to keep doing the inner work, even at this stage","Must guard against arrogance — Full Drive requires ongoing humility","The standard they hold themselves to can make collaboration harder if not managed with care","Requires organisational conditions to be fully expressed — not every culture is ready"],
+    relevance:"Full Drive is not a title, a salary band or a number of years of experience. It is a practice — one that has to be chosen and renewed every day. For modern L&D, Full Drive professionals are the ones who are genuinely future-proofing the profession. They are the ones who demonstrate that learning is a strategic function, not a support service. They are the ones who will still be essential when everything routine has been automated. If you are here, your most urgent question is not 'what do I still need to learn?' It is 'who am I helping to get here?'"
+  }
+};
+
+const stages=[
+  {name:"Deep Drift",min:0,max:29,color:"#B85C38",
+   profile:"Your honest reflection places you in Deep Drift. This is not a judgment — it is a starting point. Many experienced, talented L&D professionals find themselves here: busy, capable and quietly disconnected from the full impact they could have. The fact that you have completed this diagnostic honestly is itself an act of courage. Awareness is always the first move toward Drive.",
+   rt:"Three questions to begin your journey",
+   rq:["What one thing am I consistently avoiding in my professional practice — and what is it costing me and the people I work with?","When did I last measure the actual business impact of something I designed or delivered — and what did I find?","If I were fully in Drive tomorrow, what is the first thing I would do differently?"]},
+  {name:"Passive Drift",min:30,max:44,color:"#C87840",
+   profile:"You are in Passive Drift. You have real capability that is not yet being fully expressed. You are doing good, solid work — but you are playing it safe in ways you probably already sense. There are conversations you are avoiding, solutions you are defaulting to and a version of your practice that you have not quite stepped into yet. The Courage Point is closer than it feels.",
+   rt:"Three questions to move you forward",
+   rq:["Which of the five courage behaviours felt most uncomfortable to answer honestly — and what does that discomfort tell you?","Who in your organisation do you most need to have a direct conversation with — and what has been stopping you?","What would you do differently this week if you trusted your own professional judgment completely?"]},
+  {name:"Aware Drift",min:45,max:59,color:"#9A8020",
+   profile:"You are at the Courage Point — Aware Drift. This is the most powerful and the most uncomfortable place on the spectrum. You can see clearly where you want to go. You have the awareness, often the skills and definitely the instinct. What holds you here is not capability. It is the habit of hesitation. The shift from Aware Drift to Drive is less about learning more and more about choosing to act on what you already know.",
+   rt:"Three questions for the Courage Point",
+   rq:["Where am I waiting for permission that I could simply give myself?","Which of the five behaviours scored lowest for me — and what would practising it look like this week?","What does my body tell me in the moments when I hold back — and what would it feel like to act from Drive instead?"]},
+  {name:"Early Drive",min:60,max:79,color:"#3A7A34",
+   profile:"You are in Early Drive — and this deserves genuine acknowledgement. You are showing up with intention, influencing beyond your immediate brief and building trust through your outcomes rather than your job title. The work now is to deepen and sustain. Drive is not a destination. It is a daily practice. The professionals who stay in Drive are the ones who keep doing the inner work alongside the outer work.",
+   rt:"Three questions to deepen your Drive",
+   rq:["Which of the five behaviours is your strongest right now — and how are you actively using it to raise the standard around you?","Where do you notice yourself slipping back toward Drift — what is the trigger, and what is your response?","What does your shadow work practice look like right now — and is it honest enough?"]},
+  {name:"Full Drive",min:80,max:100,color:"#1E4A1A",
+   profile:"Full Drive. You are showing up as the L&D professional the modern world needs — commercially credible, relationally courageous, creatively bold, clearly identified and doing the deep inner work that makes everything else possible. The invitation now is not to rest here but to use your Drive in deliberate service of others. The most powerful thing a professional in Full Drive can do is become a force for raising the standard of the whole profession.",
+   rt:"Three questions for the professional in Full Drive",
+   rq:["Who in your professional community is sitting at the Courage Point right now — and what could you do to support their shift?","Where is your shadow still showing up in your rooms, even now — and what are you doing about it?","What does your next chapter of genuine growth look like — and are you being as courageous about your own development as you ask others to be about theirs?"]}
+];
+
+const bn=[
+  ["Outstanding — you lead commercially and it shows.","Strong — deepen your impact measurement this quarter.","Developing — connect your next programme to one business outcome.","Early stage — start by asking what success looks like to the business.","Focus area — this is where your Drive journey begins."],
+  ["You hold space with real courage. This is rare and powerful.","Strong — practise one more direct challenge this week.","Developing — notice where you avoid the conversation and choose differently once.","Early stage — begin by questioning the next brief you receive.","Focus area — notice when you want to rescue someone from discomfort."],
+  ["Co-creation is your signature. Teach others this practice.","Strong — keep expanding who you involve in design.","Developing — bring one learner into your next design conversation.","Early stage — start with one peer reflection this week.","Focus area — ask one learner what they need before you design anything."],
+  ["Your identity is your anchor. Others feel it before you speak.","Strong — keep naming your values explicitly in professional conversations.","Developing — write down your three professional non-negotiables this week.","Early stage — practise finishing this sentence: as an L&D professional, I stand for...","Focus area — your identity is the foundation everything else is built on."],
+  ["Your inner work is your greatest professional asset. Keep going.","Strong — your self-awareness is shaping your rooms in ways you may not fully see.","Developing — commit to one reflective practice, even ten minutes a week.","Early stage — notice one physical response in your body at work this week and sit with it.","Focus area — this behaviour will quietly unlock all the others."]
+];
+
+// ── ARCHETYPE DATA ──────────────────────────────────────────────────────────
+const archetypes={
+  "Deep Drift":{
+    type:"Your Archetype",
+    name:"The Invisible Expert",
+    tagline:'"I keep everything running. I just wish someone noticed what that actually takes."',
+    color:"#B85C38",
+    p1:"You are one of the most knowledgeable people in your organisation when it comes to how people learn. You have seen programmes succeed and fail. You understand what good looks like. And yet — almost nobody at the top of your organisation knows your name in the way that matters.",
+    p2:"Not because you are not capable. But because somewhere along the way, you learned to make yourself useful rather than visible. You fill every request. You deliver every session. You stay late, pick up the pieces and make it work — without complaint, without credit and without ever once asking whether this is the best use of what you actually have to offer.",
+    p3:"The Invisible Expert is the backbone of most L&D functions. The one who keeps everything running. The one everyone relies on and almost nobody champions. You have probably been passed over for something you deserved. You have probably watched someone less experienced but more vocal get the recognition that should have been yours. And you have probably told yourself it doesn't matter — that the work speaks for itself.",
+    pull:"It doesn't. Not anymore. Not in the digital age, where the work that can be automated already is, and the only thing that cannot be replaced is a human being with the courage to be seen.",
+    keeping:"The habit of helpfulness. The belief that doing more will eventually be noticed. A deep discomfort with self-promotion that feels, to you, like integrity — but is actually costing you everything.",
+    need:"Not more delivery. More of you — your judgment, your challenge, your professional presence in the conversations that matter.",
+    courses:[
+      {icon:"📖",title:"Modern L&D: From Drift to Drive",desc:"The book begins exactly here. Chapter One was written for The Invisible Expert — it names the pattern, its origins and the first steps out of it.",tag:"book"},
+      {icon:"🎓",title:"From Invisible to Indispensable",desc:"A course for L&D professionals ready to move from expert delivery to strategic presence. Practical, honest and built around your specific stage.",tag:"course"},
+      {icon:"👥",title:"Group Coaching Cohort",desc:"Work alongside peers at the same stage. Challenge each other. Build the habits of visibility and assertiveness in a supported, confidential space.",tag:"coaching"}
+    ]
+  },
+  "Passive Drift":{
+    type:"Your Archetype",
+    name:"The Almost Leader",
+    tagline:'"I know exactly what I should be doing. I\'m just not doing it consistently enough yet."',
+    color:"#C87840",
+    p1:"You are so close. That is the truth of where you are — and it is both the most encouraging and the most frustrating thing about this stage.",
+    p2:"You have done the reading. You have been to the conferences. You can articulate what good L&D leadership looks like with clarity and conviction. You have had the occasional conversation that felt genuinely brave — the occasional moment where you challenged the brief or pushed back on a request and felt, briefly, like the professional you know yourself to be.",
+    p3:"And then something pulls you back. A difficult reaction. A senior stakeholder who didn't respond well. A moment of self-doubt that arrived at exactly the wrong time. And you retreated — not dramatically, not permanently, but just enough to land back in the familiar pattern of doing what was asked rather than leading what was needed.",
+    pull:"The Almost Leader is not lacking skill or knowledge. They are lacking one thing: the consistent decision to act on what they already know. Not occasionally. Not when conditions are perfect. Every day, under pressure, when it counts.",
+    keeping:"Inconsistency. You have tasted Drive. You know it is possible. But the habit of retreat is faster than the habit of courage — and until that changes, you will keep oscillating between the two.",
+    need:"Consistency. The version of you that shows up in your best moments, showing up all the time.",
+    courses:[
+      {icon:"📖",title:"Modern L&D: From Drift to Drive",desc:"Chapters Three and Four were written specifically for The Almost Leader. They name the oscillation pattern and give you the tools to break it.",tag:"book"},
+      {icon:"🎓",title:"The Consistency Code",desc:"Building the daily habits of positive assertiveness. Not motivation — structure. The practices that make courageous behaviour automatic rather than effortful.",tag:"course"},
+      {icon:"👥",title:"Group Coaching Cohort",desc:"Peer accountability is one of the most powerful tools for breaking the retreat pattern. Join a cohort of professionals at the same stage and hold each other to the standard.",tag:"coaching"}
+    ]
+  },
+  "Aware Drift":{
+    type:"Your Archetype",
+    name:"The Courage Point Professional",
+    tagline:'"I can see exactly where I want to be. Something keeps pulling me back at the last moment."',
+    color:"#9A8020",
+    p1:"You are standing at a threshold. You can see exactly what is on the other side — and you have been standing here, looking at it, for longer than you want to admit.",
+    p2:"This is the most intellectually sophisticated position on the continuum and the most psychologically costly. You understand the model. You know the theory. You can diagnose Drift in others with uncomfortable precision. You have probably been the person in the room who saw what needed to change before anyone else did — and then watched someone else, less insightful but more decisive, be the one to say it.",
+    p3:"The Courage Point Professional is not held back by ignorance. They are held back by the gap between knowing and doing — a gap maintained, almost invisibly, by deeply conditioned responses that have nothing to do with capability and everything to do with the cost they believe courage will carry.",
+    pull:"Your intelligence is both your greatest asset and your greatest obstacle. You can always construct a reasonable case for waiting. The book calls this the sophisticated drift — and it is the hardest pattern to break precisely because it is so convincing.",
+    keeping:"The habit of hesitation. The belief that one more insight, one more piece of preparation, one more round of reflection will make the moment feel safe enough to act. It won't. Only acting will.",
+    need:"Less analysis. More action. The next time you see what needs to be said — say it. Before you have finished deciding whether to.",
+    courses:[
+      {icon:"📖",title:"Modern L&D: From Drift to Drive",desc:"Chapter Five is titled The Threshold. It was written for this exact stage — the moment of standing at the edge of your own capability and choosing to step.",tag:"book"},
+      {icon:"🎓",title:"Crossing the Threshold",desc:"A course designed specifically for the Courage Point Professional — turning insight into consistent action through structured practice and honest challenge.",tag:"course"},
+      {icon:"👥",title:"One-to-One Coaching with Kay",desc:"For professionals ready to make the shift with direct, personalised support. Work with Kay to identify your specific patterns and build the courage practices that will move you.",tag:"coaching"}
+    ]
+  },
+  "Early Drive":{
+    type:"Your Archetype",
+    name:"The Emerging Force",
+    tagline:'"Something has shifted. I\'m showing up differently — and I\'m not going back."',
+    color:"#3A7A34",
+    p1:"Something has shifted for you — and the people around you have noticed, even if they haven't named it yet.",
+    p2:"You are showing up differently. You are in conversations you would have avoided six months ago. You are challenging briefs, asking harder questions, connecting your work to outcomes in ways that are starting to build a different kind of credibility. You are not just delivering learning. You are beginning to lead it.",
+    p3:"The Emerging Force is one of the most energising professionals to work alongside — because they are in the process of becoming, and that process is visible. There is a quality of intention in how they show up. A sense that they have decided something about who they are going to be professionally, and they are acting from that decision.",
+    pull:"Early Drive has its vulnerabilities. The habit of Drive is new, and in high-pressure moments the older patterns can reassert themselves quickly. The work now is not to accelerate. It is to deepen. To make the courageous choice so many times that it stops feeling like a choice and starts feeling like character.",
+    keeping:"Consistency under pressure. And the inner work — because the higher you go, the more your unexamined patterns will find ways to show up in your rooms.",
+    need:"To keep going. And to start bringing others with you. The most powerful thing an Early Drive professional can do is become a force multiplier for the people still in Drift.",
+    courses:[
+      {icon:"📖",title:"Modern L&D: From Drift to Drive",desc:"Chapters Six and Seven — on sustaining Drive and leading others toward it — are your chapters now. They will give you language for what you are already doing.",tag:"book"},
+      {icon:"🎓",title:"Lead from Drive",desc:"Strategic L&D leadership for professionals who are already moving. Deepen your commercial credibility, relational courage and creative impact.",tag:"course"},
+      {icon:"👥",title:"Group Coaching Cohort",desc:"Peer challenge and accountability with professionals at the same stage. The conversations in these cohorts are some of the most honest in the profession.",tag:"coaching"}
+    ]
+  },
+  "Full Drive":{
+    type:"Your Archetype",
+    name:"The Quiet Disruptor",
+    tagline:'"I stopped waiting for the profession to change. I became the change."',
+    color:"#1E4A1A",
+    p1:"You do not need this diagnostic to tell you who you are. You already know.",
+    p2:"What you might not fully see yet is the impact you are having on the people around you — the way your presence in a room shifts what is possible, the way your willingness to say the difficult thing gives others permission to say theirs, the way your credibility has been built so quietly and so consistently that it now precedes you.",
+    p3:"The Quiet Disruptor does not announce themselves. They do not need to. They change cultures by modelling something different — a standard of presence, courage and professional integrity that others find themselves trying to match without quite knowing why. They are not the loudest voice. They are the most trusted one.",
+    pull:"Full Drive is not a destination. It is a daily practice — and the professionals who stay here are the ones who know that. Who keep doing the inner work. Who resist the temptation to coast on hard-won credibility and instead use their position to actively raise the standard of everyone around them.",
+    keeping:"Isolation. Or worse — comfort. The greatest threat to a Full Drive professional is the quiet, seductive belief that they have arrived. You have not arrived. You have earned the right to go further.",
+    need:"Your voice. Your standards. Your willingness to be the person who tells the truth about what L&D is and what it needs to become — loudly enough that the people still in Drift can hear it.",
+    courses:[
+      {icon:"📖",title:"Modern L&D: From Drift to Drive",desc:"The final chapter is yours. It asks the question that Full Drive professionals most need to sit with: who am I bringing with me, and how?",tag:"book"},
+      {icon:"🎓",title:"The Influence Lab Masterclass",desc:"For Full Drive professionals ready to lead change at organisational and sector level. This is where your practice becomes a platform for others.",tag:"course"},
+      {icon:"👥",title:"One-to-One Strategic Coaching with Kay",desc:"For the professional who has earned the right to think at the highest level about their impact, their legacy and their next chapter.",tag:"coaching"}
+    ]
+  }
+};
+
+const tagLabels={book:"📚 The Book",course:"🎓 Course",coaching:"👥 Coaching"};
+
+let cur=0,ans=Array(30).fill(0),savedStage=null;
+
+function start(){
+  document.getElementById('intro').style.display='none';
+  document.getElementById('diag').style.display='block';
+  render(0);
+}
+
+function render(si){
+  var s=S[si];
+  var html='';
+  html+='<div class="sec-header">';
+  html+='<div class="sec-num">'+s.num+'</div>';
+  html+='<div><div class="sec-tag">'+s.tag+'</div>';
+  html+='<div class="sec-name">'+s.name+'</div></div></div>';
+  for(var qi=0;qi<s.qs.length;qi++){
+    var q=s.qs[qi];
+    var ai=si*6+qi;
+    html+='<div class="q-card">';
+    html+='<div class="q-num">Question '+(ai+1)+' of 30</div>';
+    html+='<div class="q-text">'+q.q+'</div>';
+    html+='<div class="mc-options">';
+    for(var oi=0;oi<q.o.length;oi++){
+      var v=oi+1;
+      var sel=(ans[ai]===v)?' sel':'';
+      html+='<button class="mc-btn'+sel+'" data-ai="'+ai+'" data-v="'+v+'">'+q.o[oi]+'</button>';
+    }
+    html+='</div></div>';
+  }
+  document.getElementById('sc').innerHTML=html;
+  var btns=document.getElementById('sc').querySelectorAll('.mc-btn');
+  for(var i=0;i<btns.length;i++){
+    btns[i].addEventListener('click',function(){
+      var ai=parseInt(this.getAttribute('data-ai'));
+      var v=parseInt(this.getAttribute('data-v'));
+      pick(ai,v,this);
+    });
+  }
+  nav(si);
+}
+
+function pick(ai,v,btn){
+  ans[ai]=v;
+  var opts=btn.parentNode;
+  var all=opts.querySelectorAll('.mc-btn');
+  for(var i=0;i<all.length;i++){
+    all[i].classList.remove('sel');
+    all[i].style.background='';
+    all[i].style.borderColor='';
+    all[i].style.color='';
+  }
+  btn.classList.add('sel');
+  nav(cur);
+}
+
+function nav(si){
+  const f=ans.slice(si*6,si*6+6).filter(v=>v>0).length;
+  const t=ans.filter(v=>v>0).length;
+  document.getElementById('bn').disabled=f<6;
+  document.getElementById('bb').style.visibility=si>0?'visible':'hidden';
+  document.getElementById('pt').textContent=`Section ${si+1} of 5`;
+  document.getElementById('qp').textContent=`${t} of 30 answered`;
+  document.getElementById('pf').style.width=(t/30*100)+'%';
+  document.getElementById('qc').textContent=`${f}/6 in this section`;
+  document.getElementById('bn').textContent=si===4?'See My Results →':'Next Section →';
+}
+
+function next(){if(cur<4){cur++;render(cur);window.scrollTo(0,0);}else showGate();}
+function back(){if(cur>0){cur--;render(cur);window.scrollTo(0,0);}}
+
+function showGate(){
+  const total=ans.reduce((a,b)=>a+b,0);
+  const pct=Math.round((total/150)*100);
+  savedStage=stages.find(s=>pct>=s.min&&pct<=s.max)||stages[4];
+  document.getElementById('diag').style.display='none';
+  document.getElementById('gate').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function unlockResults(){
+  const name=document.getElementById('g-name').value.trim();
+  const email=document.getElementById('g-email').value.trim();
+  const org=document.getElementById('g-org').value.trim();
+  if(!name||!email||!org){
+    alert('Please fill in all three fields to unlock your profile.');
+    return;
+  }
+  // Pre-fill waiting list form
+  document.getElementById('wl-name').value=name;
+  document.getElementById('wl-email').value=email;
+  document.getElementById('wl-org').value=org;
+
+  document.getElementById('gate').style.display='none';
+  buildResults(savedStage);
+  document.getElementById('results').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function buildResults(stage){
+  const total=ans.reduce((a,b)=>a+b,0);
+  const pct=Math.round((total/150)*100);
+
+  document.getElementById('rs').textContent=stage.name;
+  document.getElementById('rsc').textContent=pct;
+  document.getElementById('rp').textContent=stage.profile;
+  setTimeout(()=>{document.getElementById('spp').style.left=Math.min(pct,96)+'%';},300);
+
+  const bsc=S.map((_,i)=>Math.round((ans.slice(i*6,i*6+6).reduce((a,b)=>a+b,0)/30)*100));
+  document.getElementById('bdr').innerHTML=S.map((s,i)=>{
+    const sc=bsc[i],ni=sc>=80?0:sc>=60?1:sc>=45?2:sc>=30?3:4;
+    const col=sc>=80?'#1E4A1A':sc>=60?'#3A7A34':sc>=45?'#9A8020':sc>=30?'#C87840':'#B85C38';
+    return `<div class="b-row"><div class="b-top"><span class="b-name">${s.name}</span><span class="b-score" style="color:${col}">${sc}<span style="font-size:11px;color:#8FAD8E;">/100</span></span></div><div class="b-bar"><div class="b-fill" style="width:${sc}%;background:${col};"></div></div><div class="b-note">${bn[i][ni]}</div></div>`;
+  }).join('');
+
+  // Archetype panel
+  const arch=archetypes[stage.name];
+  if(arch){
+    document.getElementById('archetype-panel').innerHTML=`
+      <div class="arch-hero" style="background:${arch.color};">
+        <div class="arch-eyebrow">The Drift-to-Drive Diagnostic™ · Your Full Profile</div>
+        <div class="arch-type">${arch.type}</div>
+        <div class="arch-name">${arch.name}</div>
+        <div class="arch-tagline">${arch.tagline}</div>
+      </div>
+      <div class="arch-body">
+        <div class="arch-section-label">Your Profile</div>
+        <div class="arch-para">${arch.p1}</div>
+        <div class="arch-para">${arch.p2}</div>
+        <div class="arch-para">${arch.p3}</div>
+        <div class="arch-pull">${arch.pull}</div>
+        <div class="arch-grid">
+          <div class="arch-card keeping">
+            <div class="arch-card-label">What is keeping you here</div>
+            <div class="arch-card-text">${arch.keeping}</div>
+          </div>
+          <div class="arch-card need">
+            <div class="arch-card-label">What your organisation needs from you</div>
+            <div class="arch-card-text">${arch.need}</div>
+          </div>
+        </div>
+      </div>`;
+
+    // Course panel
+    document.getElementById('course-panel').innerHTML=arch.courses.map(c=>`
+      <div class="course-card">
+        <div class="course-icon">${c.icon}</div>
+        <div>
+          <div class="course-title">${c.title}</div>
+          <div class="course-desc">${c.desc}</div>
+          <span class="course-tag ${c.tag}">${tagLabels[c.tag]}</span>
+        </div>
+      </div>`).join('');
+  }
+
+  // Stage insight panel
+  const ins=stageInsights[stage.name];
+  if(ins){
+    document.getElementById('stage-insight').innerHTML=`
+      <div class="stage-insight" style="margin-top:16px;">
+        <div class="si-header">
+          <div class="si-label">Understanding Your Stage</div>
+          <div class="si-title">${stage.name} — What This Stage Really Means</div>
+          <div class="si-def">${ins.def}</div>
+        </div>
+        <div class="si-body">
+          <div class="si-col">
+            <div class="si-col-label pros">What works at this stage</div>
+            ${ins.pros.map(p=>`<div class="si-item pro">${p}</div>`).join('')}
+          </div>
+          <div class="si-col">
+            <div class="si-col-label cons">What holds you back</div>
+            ${ins.cons.map(c=>`<div class="si-item con">${c}</div>`).join('')}
+          </div>
+        </div>
+        <div class="si-relevance">
+          <div class="si-rel-label">Why This Matters in Modern L&D</div>
+          <div class="si-rel-text">${ins.relevance}</div>
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('rrt').textContent=stage.rt;
+  document.getElementById('rrq').innerHTML=stage.rq.map(q=>`<div class="ref-q">${q}</div>`).join('');
+}
+
+function joinWaitlist(){
+  const name=document.getElementById('wl-name').value.trim();
+  const email=document.getElementById('wl-email').value.trim();
+  const org=document.getElementById('wl-org').value.trim();
+  if(!name||!email){alert('Please enter your name and email to join the waiting list.');return;}
+  // CONNECT TO FORMSPREE/MAILCHIMP HERE WHEN READY
+  document.getElementById('wl-form').style.display='none';
+  document.getElementById('wl-confirm').style.display='block';
+}
+
+function retake(){
+  ans=Array(20).fill(0);cur=0;savedStage=null;
+  document.getElementById('results').style.display='none';
+  document.getElementById('gate').style.display='none';
+  document.getElementById('intro').style.display='block';
+  window.scrollTo(0,0);
+}
+
+</script>
+</body>
+</html>
